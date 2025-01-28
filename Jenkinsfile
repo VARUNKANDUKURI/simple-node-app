@@ -12,7 +12,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh 'sudo docker build -t simple-node-app:latest .'
+                sh 'docker build -t simple-node-app:latest .'
             }
         }
 
@@ -22,9 +22,9 @@ pipeline {
                 script {
                     // Stop and remove existing container if running
                     sh '''
-                    if [ "$(sudo docker ps -q -f name=simple-node-app)" ]; then
-                        sudo docker stop simple-node-app
-                        sudo docker rm simple-node-app
+                    if [ "$(docker ps -q -f name=simple-node-app)" ]; then
+                        docker stop simple-node-app
+                        docker rm simple-node-app
                     fi
                     '''
                 }
@@ -34,7 +34,7 @@ pipeline {
         stage('Run New Container') {
             steps {
                 echo 'Running new container...'
-                sh 'sudo docker run -d -p 3100:3100 --name simple-node-app simple-node-app:latest'
+                sh 'docker run -d -p 3100:3100 --name simple-node-app simple-node-app:latest'
             }
         }
     }
