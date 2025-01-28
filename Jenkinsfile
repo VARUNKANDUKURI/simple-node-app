@@ -26,9 +26,10 @@ pipeline {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
-                    // Check if PM2 is running and stop it if it exists
-                    def pm2_pid = sh(script: "pgrep -f 'PM2'", returnStdout: true).trim()
-
+                    // Refined approach to find the PM2 process
+                    def pm2_pid = sh(script: "pgrep -f '/home/ubuntu/.pm2'", returnStdout: true).trim()
+                    echo "PM2 process found: ${pm2_pid}"
+                    
                     if (pm2_pid) {
                         echo "Stopping PM2 process with PID: ${pm2_pid}"
                         sh "sudo kill -9 ${pm2_pid}"  // Use sudo to kill the process
