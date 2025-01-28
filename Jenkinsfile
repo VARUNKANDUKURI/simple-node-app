@@ -9,32 +9,31 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Building Docker image...'
-                sh 'docker build -t simple-node-app:latest .'
+                echo 'Installing dependencies...'
+                sh 'npm install'
             }
         }
 
-        stage('Stop Existing Container') {
+        stage('Stop Existing Node App') {
             steps {
-                echo 'Stopping existing container...'
+                echo 'Stopping existing Node.js app...'
                 script {
-                    // Stop and remove existing container if running
+                    // Stop existing app if running
                     sh '''
-                    if [ "$(docker ps -q -f name=simple-node-app)" ]; then
-                        docker stop simple-node-app
-                        docker rm simple-node-app
+                    if pgrep -f "node app.js"; then
+                        pkill -f "node app.js"
                     fi
                     '''
                 }
             }
         }
 
-        stage('Run New Container') {
+        stage('Run Node.js App') {
             steps {
-                echo 'Running new container...'
-                sh 'docker run -d -p 3100:3100 --name simple-node-app simple-node-app:latest'
+                echo 'Running Node.js app...'
+                sh 'nohup node app.js &'
             }
         }
     }
