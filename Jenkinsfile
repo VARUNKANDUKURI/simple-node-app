@@ -16,11 +16,11 @@ pipeline {
             }
         }
 
-        stage('Stop Existing Node App') {
+        stage('Stop Existing Node.js App') {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
-                    // Stop existing app if running
+                    // Stop the running Node.js app, if any
                     sh '''
                     if pgrep -f "node app.js"; then
                         pkill -f "node app.js"
