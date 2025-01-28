@@ -1,4 +1,5 @@
-pipeline {
+
+ipipeline {
     agent any
 
     environment {
@@ -26,10 +27,9 @@ pipeline {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
-                    // Find the process ID of the running Node.js app
+                    // Check if PM2 is running and stop it if it exists
                     def pm2_pid = sh(script: "pgrep -f 'PM2'", returnStdout: true).trim()
 
-                    // Check if the process ID was found
                     if (pm2_pid) {
                         echo "Stopping PM2 process with PID: ${pm2_pid}"
                         sh "sudo kill -9 ${pm2_pid}"  // Use sudo to kill the process
