@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 
         7. **Final Deployment:**
             • After making the necessary updates to the Jenkinsfile and resolving permission issues, the pipeline was successfully triggered.
-            • The deployment now successfully pulls the code from GitHub, builds the Docker image, stops the old container, and runs the new container with the updated code.
+            • The deployment now successfully pulls the code from GitHub, builds the Docker image, stops the old container, and runs the new container with updated code.
     `);
 });
 
