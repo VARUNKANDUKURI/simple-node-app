@@ -26,10 +26,15 @@ pipeline {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
+                    // Print the current process list to debug
+                    echo "Listing current processes..."
+                    sh 'ps -x'
+
                     // Refined approach to find the PM2 process
                     def pm2_pid = sh(script: "pgrep -f '/home/ubuntu/.pm2'", returnStdout: true).trim()
                     echo "PM2 process found: ${pm2_pid}"
-                    
+
+                    // Check if we got a valid PID and stop the PM2 process
                     if (pm2_pid) {
                         echo "Stopping PM2 process with PID: ${pm2_pid}"
                         sh "sudo kill -9 ${pm2_pid}"  // Use sudo to kill the process
@@ -43,10 +48,8 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 echo 'Deploying Node.js application...'
-                
-                // SCP to copy files from Jenkins to EC2
                 script {
-                    // Copy the application files from the workspace to the EC2 instance
+                    // SCP to copy files from Jenkins to EC2
                     sh "scp -i ${SSH_KEY} -o StrictHostKeyChecking=no -r * ubuntu@${SERVER_IP}:${DEPLOY_PATH}"
                 }
             }
