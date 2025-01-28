@@ -26,10 +26,11 @@ pipeline {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
-                    def pid = sh(script: "pgrep -f node app.js", returnStdout: true).trim()
+                    // Find and stop the running Node.js app using the process name
+                    def pid = sh(script: "pgrep -f 'node .*app.js'", returnStdout: true).trim()
                     if (pid) {
                         echo "Stopping Node.js app with PID: ${pid}"
-                        sh "pkill -f node app.js"
+                        sh "kill -9 ${pid}"
                     } else {
                         echo 'No running Node.js app found.'
                     }
