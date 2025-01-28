@@ -26,7 +26,7 @@ pipeline {
                 echo 'Stopping existing Node.js app...'
                 script {
                     // Find and stop the running Node.js app using the process name
-                    def pid = sh(script: "pgrep -f 'node .*app.js'", returnStdout: true).trim()
+                    def pid = sh(script: pgrep -f 'node .*app.js', returnStdout: true).trim()
                     if (pid) {
                         echo "Stopping Node.js app with PID: ${pid}"
                         sh "sudo kill -9 ${pid}"  // Use sudo to kill the process
