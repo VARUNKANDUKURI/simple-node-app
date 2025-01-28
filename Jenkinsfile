@@ -25,16 +25,15 @@ pipeline {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
-                    // Find and stop the running Node.js app using the process name
-                def pm2_pid = sh(script: "pgrep -f 'PM2 v5.4.3: God Daemon'", returnStdout: true).trim()
-
-if (pm2_pid) {
-    echo "Stopping PM2 process with PID: ${pm2_pid}"
-    sh "sudo kill -9 ${pm2_pid}"  // Use sudo to kill the process
-} else {
-    echo "No PM2 process found."
-}
-              }
+                    // Find and stop the running PM2 process
+                    def pm2_pid = sh(script: "pgrep -f 'PM2'", returnStdout: true, returnStatus: true).trim()
+                    if (pm2_pid) {
+                        echo "Stopping PM2 process with PID: ${pm2_pid}"
+                        sh "sudo kill -9 ${pm2_pid}"  // Use sudo to kill the process
+                    } else {
+                        echo "No PM2 process found or failed to retrieve PID"
+                    }
+                }
             }
         }
 
