@@ -20,10 +20,10 @@ pipeline {
             steps {
                 echo 'Stopping existing Node.js app...'
                 script {
-                    // Stop the running Node.js app, if any
+                    // Stop the running Node.js app with sudo if needed
                     sh '''
                     if pgrep -f "node app.js"; then
-                        pkill -f "node app.js"
+                        sudo pkill -f "node app.js"
                     fi
                     '''
                 }
@@ -32,8 +32,11 @@ pipeline {
 
         stage('Run Node.js App') {
             steps {
-                echo 'Running Node.js app...'
-                sh 'nohup node app.js &'
+                echo 'Starting Node.js app...'
+                script {
+                    // Run the updated Node.js app
+                    sh 'nohup node app.js > app.log 2>&1 &'
+                }
             }
         }
     }
